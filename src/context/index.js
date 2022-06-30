@@ -1,4 +1,4 @@
-import React, { useState, useContext, useReducer, useEffect } from "react";
+import React, { useContext, useReducer, useEffect } from "react";
 import cartData from "../data";
 import reducer from "../components/reducer";
 
@@ -30,6 +30,21 @@ const AppProvider = ({ children }) => {
   const decrease = (id) => {
     dispatch({ type: "DECREASE", payload: id });
   };
+
+  const getData = async () => {
+    dispatch({ type: "LOADING" });
+    const response = await fetch(url);
+    const cart = response.json();
+    dispatch({ type: "DISPLAY_ITEMS", payload: cart });
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  useEffect(() => {
+    dispatch({ type: "GET_TOTALS" });
+  }, [state.cart]);
 
   return (
     <AppContext.Provider
