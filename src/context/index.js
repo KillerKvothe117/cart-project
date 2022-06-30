@@ -34,8 +34,12 @@ const AppProvider = ({ children }) => {
   const getData = async () => {
     dispatch({ type: "LOADING" });
     const response = await fetch(url);
-    const cart = response.json();
+    const cart = await response.json();
     dispatch({ type: "DISPLAY_ITEMS", payload: cart });
+  };
+
+  const toggleAmount = (id, type) => {
+    dispatch({ type: "TOGGLE_AMOUNT", payload: { id, type } });
   };
 
   useEffect(() => {
@@ -48,7 +52,7 @@ const AppProvider = ({ children }) => {
 
   return (
     <AppContext.Provider
-      value={{ ...state, clearCart, remove, increase, decrease }}
+      value={{ ...state, clearCart, remove, increase, decrease, toggleAmount, }}
     >
       {children}
     </AppContext.Provider>
